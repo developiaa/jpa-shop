@@ -1,6 +1,7 @@
 package study.developia.jpashop;
 
 import org.springframework.stereotype.Repository;
+import study.developia.jpashop.domain.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
