@@ -3,6 +3,7 @@ package study.developia.jpashop.domain.item;
 import lombok.Getter;
 import lombok.Setter;
 import study.developia.jpashop.domain.Category;
+import study.developia.jpashop.exception.NotEnoughStockException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,5 +26,29 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+    //비즈니스 로직
+
+    /**
+     * stock 증가
+     *
+     * @param quantity
+     */
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    /**
+     * stock 감소
+     *
+     * @param quantity
+     */
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock");
+        }
+        this.stockQuantity = restStock;
+    }
 
 }
