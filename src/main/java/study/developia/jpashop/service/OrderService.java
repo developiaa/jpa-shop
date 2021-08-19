@@ -8,6 +8,7 @@ import study.developia.jpashop.domain.item.Item;
 import study.developia.jpashop.repository.ItemRepository;
 import study.developia.jpashop.repository.MemberRepository;
 import study.developia.jpashop.repository.OrderRepository;
+import study.developia.jpashop.repository.OrderSearch;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class OrderService {
     }
 
     //검색
-//    public List<Order> findOrders(OrderSearch orderSearch){
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch){
+        return orderRepository.findAll(orderSearch);
+    }
 }
