@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.aspectj.weaver.ast.Or;
 import study.developia.jpashop.domain.item.Item;
 
 import javax.persistence.*;
