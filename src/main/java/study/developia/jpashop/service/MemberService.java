@@ -1,12 +1,11 @@
 package study.developia.jpashop.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.developia.jpashop.domain.Member;
 import study.developia.jpashop.repository.MemberRepository;
+import study.developia.jpashop.repository.MemberRepositoryOld;
 
 import java.util.List;
 
@@ -38,12 +37,12 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id).get();
         member.setName(name);
     }
 }
