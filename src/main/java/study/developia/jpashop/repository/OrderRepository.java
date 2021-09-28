@@ -1,9 +1,14 @@
 package study.developia.jpashop.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import study.developia.jpashop.domain.Order;
+import study.developia.jpashop.domain.OrderStatus;
+import study.developia.jpashop.domain.QMember;
+import study.developia.jpashop.domain.QOrder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -22,10 +27,10 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
-        return em.createQuery("select o from Order o join o.member m", Order.class)
-                .getResultList();
-    }
+//    public List<Order> findAll(OrderSearch orderSearch) {
+//        return em.createQuery("select o from Order o join o.member m", Order.class)
+//                .getResultList();
+//    }
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
 
@@ -65,6 +70,35 @@ public class OrderRepository {
         }
 
         return query.getResultList();
+    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+//                .where(order.status.eq(orderSearch.getOrderStatus())) // 정적쿼리
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression nameLike(String memberName) {
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return QMember.member.name.like(memberName);
+    }
+
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(statusCond);
     }
 
     public List<Order> findAllWithMemberDelivery() {
